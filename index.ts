@@ -32,7 +32,7 @@ observable.subscribe({
 // sub1 3
 // sub2 3
 
-// function coldInterval() {
+// function hotInterval() {
 //   let count = 0;
 //   return new Observable((subscriber) => {
 //     const intervalId = setInterval(() => {
@@ -49,23 +49,12 @@ observable.subscribe({
 //   });
 // }
 
-// const coldInterval$ = coldInterval();
-// coldInterval$.subscribe((value) => console.log('sub1:', value));
+// const hotInterval$ = hotInterval();
+// hotInterval$.subscribe((value) => console.log('sub1:', value));
 // setTimeout(
-//   () => coldInterval$.subscribe((value) => console.log('sub2:', value)),
+//   () => hotInterval$.subscribe((value) => console.log('sub2:', value)),
 //   3000
 // );
-
-const observable = new Observable((subscriber) => {
-  subscriber.next(1);
-  subscriber.next(2);
-  setTimeout(() => subscriber.error('Error from Observable'), 2000);
-}).pipe(catchError(catchError((val) => of(`I caught: ${val}`))));
-
-observable.subscribe({
-  next: (val) => console.log('THIS IS VALUE', val),
-  error: (err) => console.log('THIS IS ERROR', err),
-});
 
 // Обробити відповідь запиту, в pipe спочатку витягнути об'єкт response(це масив), відфільтруєте масив так, щоб залишилися тільки пости з id менше 5.
 // Hint: так як response - це буде масив постів, ви не можете просто фідфільтрувати його через filter(він приймає кожен елемент масиву, а не цілий масив). Для рішення цієї задачі вам потрібні оператори mergeMap або concatMap, в яких ви зробите з(перекладіть англійською) масиву потік окремих елементів масиву([1, 2, 3] => 1, 2, 3), відфільтруєте їх,а потім зберете назад в масив за допомогою оператора. В subscribe ми отримаємо масив з 4 об'єктів id яких менше 5

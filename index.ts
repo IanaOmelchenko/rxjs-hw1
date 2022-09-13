@@ -1,9 +1,20 @@
 import './style.css';
 
-import { Observable } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 
 // Створити Observable, яка буде віддавати 2 синхронні значення "1", "2", а через 2 секунди викидувати помилку. Ваша задача використовуючи існуючі оператори обробити цю помилку всередині pipe, для того, щоб вона не дійшла до subscribe
+
+const observable = new Observable((subscriber) => {
+  subscriber.next(1);
+  subscriber.next(2);
+  setTimeout(() => subscriber.error('Error from Observable'), 2000);
+}).pipe(catchError(catchError((val) => of(`I caught: ${val}`))));
+
+observable.subscribe({
+  next: (val) => console.log('THIS IS VALUE', val),
+  error: (err) => console.log('THIS IS ERROR', err),
+});
 
 // Створити аналог fromEvent оператора( який під капотом використовує addEventListener).
 // Не забувайте про витоки пам'яті і те, як їх уникати в RxJS(після відписання від цього оператора ми не повинні більше слухати події)
@@ -44,6 +55,17 @@ import { ajax } from 'rxjs/ajax';
 //   () => coldInterval$.subscribe((value) => console.log('sub2:', value)),
 //   3000
 // );
+
+const observable = new Observable((subscriber) => {
+  subscriber.next(1);
+  subscriber.next(2);
+  setTimeout(() => subscriber.error('Error from Observable'), 2000);
+}).pipe(catchError(catchError((val) => of(`I caught: ${val}`))));
+
+observable.subscribe({
+  next: (val) => console.log('THIS IS VALUE', val),
+  error: (err) => console.log('THIS IS ERROR', err),
+});
 
 // Обробити відповідь запиту, в pipe спочатку витягнути об'єкт response(це масив), відфільтруєте масив так, щоб залишилися тільки пости з id менше 5.
 // Hint: так як response - це буде масив постів, ви не можете просто фідфільтрувати його через filter(він приймає кожен елемент масиву, а не цілий масив). Для рішення цієї задачі вам потрібні оператори mergeMap або concatMap, в яких ви зробите з(перекладіть англійською) масиву потік окремих елементів масиву([1, 2, 3] => 1, 2, 3), відфільтруєте їх,а потім зберете назад в масив за допомогою оператора. В subscribe ми отримаємо масив з 4 об'єктів id яких менше 5

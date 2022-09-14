@@ -1,6 +1,16 @@
 import './style.css';
 
-import { Observable, catchError, of, interval, take, map } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  of,
+  interval,
+  take,
+  map,
+  flatMap,
+  pluck,
+  filter,
+} from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 
 // Створити Observable, яка буде віддавати 2 синхронні значення "1", "2", а через 2 секунди викидувати помилку. Ваша задача використовуючи існуючі оператори обробити цю помилку всередині pipe, для того, щоб вона не дійшла до subscribe
@@ -84,24 +94,24 @@ function newFromEvent(el, actionType) {
 // Обробити відповідь запиту, в pipe спочатку витягнути об'єкт response(це масив), відфільтруєте масив так, щоб залишилися тільки пости з id менше 5.
 // Hint: так як response - це буде масив постів, ви не можете просто фідфільтрувати його через filter(він приймає кожен елемент масиву, а не цілий масив). Для рішення цієї задачі вам потрібні оператори mergeMap або concatMap, в яких ви зробите з(перекладіть англійською) масиву потік окремих елементів масиву([1, 2, 3] => 1, 2, 3), відфільтруєте їх,а потім зберете назад в масив за допомогою оператора. В subscribe ми отримаємо масив з 4 об'єктів id яких менше 5
 
-const posts$ = ajax.getJSON('https://jsonplaceholder.typicode.com/posts').pipe(
-  map((result) => {
-    console.log('*** result ***', result);
-    console.log('*** result ***', typeof result);
-    return result;
-  }),
-  catchError((error) => {
-    console.log('error: ', error);
-    return of(error);
-  })
-);
+// const posts$ = ajax.getJSON('https://jsonplaceholder.typicode.com/posts').pipe(
+//   map((result: any) => {
+//     return result.filter((el) => {
+//       return el.id < 5;
+//     });
+//   }),
+//   catchError((error) => {
+//     console.log('error: ', error);
+//     return of(error);
+//   })
+// );
 
-posts$.subscribe({
-  next: (value) => {
-    console.log('THIS IS A VALUE', typeof value);
-  },
-  error: (err) => console.log(err),
-});
+// posts$.subscribe({
+//   next: (value) => {
+//     console.log('THIS IS A VALUE', value);
+//   },
+//   error: (err) => console.log(err),
+// });
 
 //********************************************************************* */
 

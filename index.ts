@@ -19,7 +19,20 @@ observable.subscribe({
 // Створити аналог fromEvent оператора( який під капотом використовує addEventListener).
 // Не забувайте про витоки пам'яті і те, як їх уникати в RxJS(після відписання від цього оператора ми не повинні більше слухати події)
 
+function newFromEvent(el, actionType) {
+  el.addEventListener(actionType);
+  return Observable.create((observer) => {
+    try {
+      observer.next(actionType);
+    } catch (error) {
+      observer.error(error);
+    }
+  });
+}
+
 // Використовуючи оператор interval, підписатися на нього і слухати до того моменту, доки значення не буде більше 5(використовуючи оператор в pipe)
+
+
 
 // Перетворіть coldInterval нижче на hotInterval, щоб він став гарячим(віддавав одні і ті ж значення різним підписникам)
 // Приклад:
